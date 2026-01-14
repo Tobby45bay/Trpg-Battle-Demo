@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afcab2f791d4c8a4dbf659d52de6a6e3, type: 3}
+  m_Name: Stat Test 1
+  m_EditorClassIdentifier: 
+  MapData: {fileID: 11400000, guid: 51ad10e43fac99a4caba331799403248, type: 2}
+  PlayerUnitLimt: 4
+  StatingTiles: []
+  UnitsOnMap:
+  - OverrideName: 
+    templateId: 0
+    hasFactionOverride: 1
+    OverrideFactionId: 1
+    OverrideCurrentLevel: 0
+    OverrideCurrentExp: 0
+    hasStatOverride: 0
+    OverrideUnitStatData:
+      coreStats: []
+    OverrideJob:
+      JobID: 0
+      jobLevel: 0
+    OverrideJobs: []
+    Overrideitems:
+    - ItemID: 100
+      Name: 
+      uses: 5
+      isEquipped: 1
+    OverrideAttacks: 
+    OverrideEquippedSkills: c9000000
+    OverrideKnowSkills: c9000000
+    OverrideTilePostion: {x: 1, y: 1}
+  - OverrideName: 
+    templateId: 2
+    hasFactionOverride: 0
+    OverrideFactionId: 0
+    OverrideCurrentLevel: 0
+    OverrideCurrentExp: 0
+    hasStatOverride: 0
+    OverrideUnitStatData:
+      coreStats: []
+    OverrideJob:
+      JobID: 0
+      jobLevel: 0
+    OverrideJobs: []
+    Overrideitems:
+    - ItemID: 100
+      Name: 
+      uses: 5
+      isEquipped: 1
+    OverrideAttacks: 
+    OverrideEquippedSkills: ca000000
+    OverrideKnowSkills: ca000000
+    OverrideTilePostion: {x: 0, y: 0}

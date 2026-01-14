@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8e985a3eedadbb49a65f80bd55c3753, type: 3}
+  m_Name: Power_Test
+  m_EditorClassIdentifier: 
+  skillId: 201
+  skillName: Power Test
+  abilityData:
+    effects:
+    - triggerCall:
+        useCustom: 0
+        core: 0
+        custom: 
+      actions:
+      - rid: 885358191215378438
+  attackOverride:
+    enabled: 0
+    data:
+      damageType: 0
+      statOverride: 0
+  defenceOverride:
+    enabled: 0
+    data:
+      damageType: 0
+      statOverride: 0
+  counterOverride:
+    enabled: 0
+    data:
+      requiredWeapon: 
+      rangeOverride: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 885358191215378438
+      type: {class: ApplyEffectActionData, ns: Game.Systems.Effect, asm: Assembly-CSharp}
+      data:
+        name: 
+        EffectId: 101
+        TargetType: 0
+        MaxDuration: 3
+        CanRefresh: 0
