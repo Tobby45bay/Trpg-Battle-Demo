@@ -1,4 +1,5 @@
 using Game.Core.Game;
+using Game.Core.Game.BattleUI;
 using Game.Systems.BattleMap;
 using Game.Systems.Combat;
 using Game.Systems.Effect;
@@ -27,6 +28,8 @@ namespace Game.Core.Battle
             Instance._Logger.Log(evt);
         }
 
+        public CommandMenu CommandMenu;
+
         public static BattleManager Instance { get; private set; }
         public GameDatabases gameDatabases { get; set; }
         public BattleSystems battleSystems;
@@ -44,6 +47,7 @@ namespace Game.Core.Battle
             battleSystems.InitializeSystems(GameManager.Instance, tilemapManager);
             InitializeBattleStateMachine();
 
+            CommandMenu = FindObjectOfType<CommandMenu>();
             var battleData = new BattleConfigData()
             {
                 mapData = config.MapData,
@@ -116,6 +120,7 @@ namespace Game.Core.Battle
         public TilemapManager TilemapManager { get; private set; }
         public TurnManager TurnManager { get; private set; }
         public CombatCoordinator CombatCoordinator { get; private set; }
+        public MenuInputController MenuInputController { get; private set; }
 
         public void InitializeSystems(GameManager gm, TilemapManager tilemapManager)
         {
@@ -153,6 +158,7 @@ namespace Game.Core.Battle
             CombatCoordinator = new CombatCoordinator();
             CombatCoordinator.InitializeSystem(this, gm);
 
+            MenuInputController = new MenuInputController();
         }
 
         public int ResolveTarget(TargetType type, EffectContext ctx)
@@ -265,6 +271,11 @@ namespace Game.Core.Battle
         {
             switch (request.ActionType)
             {
+                case ActionType.Move:
+                    TilemapManager.TryMoveUnit(request.ActorId, request.TargetTile);
+                    break;
+                case ActionType.Wait:
+                    break;
                 case ActionType.Attack:
                     break;
             }

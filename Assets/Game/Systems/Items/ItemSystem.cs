@@ -54,7 +54,7 @@ namespace Game.Systems.Item
     {
         public int ownerUnitId;
         public List<ItemInstance> inventory = new();
-        public ItemInstance equippedWeapon;
+        public ItemInstance equippedWeapon { get; private set; }
 
         public UnitInventory(int unitId)
         {
@@ -84,6 +84,7 @@ namespace Game.Systems.Item
             equippedWeapon.isEquipped = true;
 
             TriggerEquipAction(equippedWeapon, true);
+            Debug.Log($"{equippedWeapon.Data.name} was eqipped");
             return true;
         }
 
@@ -218,7 +219,7 @@ namespace Game.Systems.Item
 
         public void RegisterUnit(int unitId, List<ItemSave> itemSaves)
         {
-            if (!inventoryRegistry.ContainsKey(unitId)) return;
+            if (inventoryRegistry.ContainsKey(unitId)) return;
 
             var inventory = new UnitInventory(unitId);
             inventoryRegistry[unitId] = InventoryHelper.LoadInventory(itemSaves, inventory);
@@ -274,6 +275,13 @@ namespace Game.Systems.Item
             BattleManager.Instance.battleSystems.AttackLoadOutManager.SetDefaultAttack(unitId, -1);
         }
 
+        public ItemInstance GetEquippedWeapon(int unitId)
+        {
+            if (!inventoryRegistry.ContainsKey(unitId)) return null;
+            var inventory = inventoryRegistry[unitId];
+            return inventory.equippedWeapon;
+        }
+
         public void TradeItem(int tradingUnitId,int partnerUnitId,ItemInstance tradingItemInstance)
         {
             if (!inventoryRegistry.ContainsKey(tradingUnitId) ||
@@ -301,7 +309,7 @@ namespace Game.Systems.Item
         public static UnitInventory LoadInventory(List<ItemSave> items,UnitInventory unitInventory)
         {
             unitInventory.inventory.Clear();
-            unitInventory.equippedWeapon = null;
+            unitInventory.UnquipWeapon();
 
             foreach (var item in items)
             {

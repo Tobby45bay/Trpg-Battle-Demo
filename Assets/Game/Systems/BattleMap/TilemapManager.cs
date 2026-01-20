@@ -26,7 +26,8 @@ namespace Game.Systems.BattleMap
         private readonly Dictionary<Vector2Int, TileInstance> tiles = new();
         public Dictionary<int, Vector2Int> units = new();
         public Dictionary<int , UnitView> unitsViews = new();
-        private BattleMapCamera battleCamera;                           
+        private BattleMapCamera battleCamera;
+        public Pathfinder Pathfinder;
 
         public TileCursor cursor;
         public CursorController cursorController;
@@ -137,6 +138,7 @@ namespace Game.Systems.BattleMap
                 }
             }
 
+            Pathfinder = new Pathfinder(this);
             battleCamera?.RefreshBounds();
         }
         public void GenerateTilePaletteFromSprites()
@@ -184,7 +186,7 @@ namespace Game.Systems.BattleMap
             unitsViews[unitInstanceId] = unitView;
         }
 
-        public void MoveUnit(int unitId, Vector2Int targetPos)
+        public bool TryMoveUnit(int unitId, Vector2Int targetPos)
         {
             if (!units.TryGetValue(unitId, out Vector2Int currentPos))
                 return;
@@ -226,6 +228,12 @@ namespace Game.Systems.BattleMap
                 return;
 
             TriggerExitOrEnter(unitId, tileInstance, tileInstance.tileData.onUnitExit);
+        }
+
+        public bool GetUnitView(in int unitId, out UnitView unitView)
+        {
+            if (unitsViews.TryGetValue(unitId, out unitView)) return false;
+            return true;
         }
 
         // ---------------------------------------------------------------
@@ -274,12 +282,46 @@ namespace Game.Systems.BattleMap
             }
         }
 
+        public bool TryGetUnitPos(int unitId, out Vector2Int pos)
+        {
+            return units.TryGetValue(unitId, out pos);
+        }
+
         public CostTable GetMoveCostTable(Vector2Int from, Vector2Int to)
         {
             return tiles[to].tileData.costTable;
         }
 
-        public bool IsWalkable(Vector2Int pos) => tiles.TryGetValue(pos, out var t) && t.tileData.isPassable;
+        public bool IsWalkable(Vector2Int pos, MoveType moveType)
+        {
+            if (!tiles.TryGetValue(pos, out var tile))
+                return false;
+
+            var data = tile.tileData;
+
+            // Flying units: only blocked by explicit anti-flying tiles
+            if (moveType == MoveType.Flying)
+            {
+                return !data.BlockFlying;
+            }
+
+            // Mounted units
+            if (moveType == MoveType.Mounted)
+            {
+                if (data.BlockMounted)
+                    return false;
+            }
+
+            // Armored units
+            if (moveType == MoveType.Armored)
+            {
+                if (data.BlockArmored)
+                    return false;
+            }
+
+            // Default passability
+            return data.isPassable;
+        }
         public bool CanEnter(Vector2Int from, Vector2Int to)
         {
             if (!tiles.TryGetValue(to, out var tile))
