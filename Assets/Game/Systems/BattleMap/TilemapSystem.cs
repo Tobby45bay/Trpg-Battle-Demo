@@ -1,12 +1,14 @@
-using Game.Systems.Job;
+﻿using Game.Systems.Job;
 using Game.Systems.Tags;
 using Game.Systems.Trigger;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using static Game.Core.Game.GameManager;
+using static UnityEngine.UI.CanvasScaler;
 
 namespace Game.Systems.BattleMap
 {
@@ -14,7 +16,7 @@ namespace Game.Systems.BattleMap
     public enum MoveType
     {
         Infantry,
-        Calvary,
+        Mounted,
         Flying,
         Armored,
         None
@@ -33,13 +35,14 @@ namespace Game.Systems.BattleMap
     public class CostEntry
     {
         public MoveType moveType;
+        public TerrainInteraction TerrainInteraction;
         public int cost = 0;
     }
 
     [Serializable]
     public class CostTable
     {
-        public List<CostEntry> costs =new();
+        public List<CostEntry> costs = new();
 
         public bool TryGetCost(MoveType moveType, out int cost)
         {
@@ -55,16 +58,31 @@ namespace Game.Systems.BattleMap
             cost = default;
             return false;
         }
+
+        public bool TryGetTerrianInteractin(MoveType moveType, out TerrainInteraction terrainInteraction)
+        {
+            for (int i = 0; i < costs.Count; i++)
+            {
+                if (costs[i].moveType == moveType)
+                {
+                    terrainInteraction = costs[i].TerrainInteraction;
+                    return true;
+                }
+            }
+
+            terrainInteraction = default;
+            return false;
+        }
     }
 
     [Serializable]
-    public class  TileInteractionSet
+    public class TileInteractionSet
     {
-        public List <ActionData> interactions =new();
+        public List<ActionData> interactions = new();
 
-        public void AddAction(ActionData action) { interactions.Add(action);}
+        public void AddAction(ActionData action) { interactions.Add(action); }
 
-        public void Interact(TriggerContext context) 
+        public void Interact(TriggerContext context)
         {
             foreach (var action in interactions)
             {
@@ -100,7 +118,7 @@ namespace Game.Systems.BattleMap
         bool TryGetNode(Vector2Int pos, out TNode node);
         IEnumerable<Vector2Int> GetNeighbors(Vector2Int pos);
         CostTable GetMoveCostTable(Vector2Int from, Vector2Int to);
-        bool IsWalkable(Vector2Int pos);
+        bool IsWalkable(Vector2Int pos, MoveType moveType);
         bool CanEnter(Vector2Int from, Vector2Int to);
     }
 
@@ -113,59 +131,194 @@ namespace Game.Systems.BattleMap
             Rectangle,
             Diamond,
         }
+
         private readonly IGridProvider<TileInstance> grid;
 
         public Pathfinder(IGridProvider<TileInstance> grid)
         {
             this.grid = grid;
         }
-        public HashSet<Vector2Int> GetReachableTiles(Vector2Int start, int moveRange, MovementProfileData profile)
+
+        public Dictionary<Vector2Int, int> GetReachableTiles(Vector2Int start, int moveRange, MovementProfileData movementProfileData)
         {
-            var reachable = new HashSet<Vector2Int>();
+            // Track best remaining movement per tile (FE-style)
+            var bestRemaining = new Dictionary<Vector2Int, int>();
             var frontier = new Queue<(Vector2Int pos, int remainingMove)>();
 
             frontier.Enqueue((start, moveRange));
-            reachable.Add(start);
+            bestRemaining[start] = moveRange;
 
             while (frontier.Count > 0)
             {
-                var (current, remainingMove) = frontier.Dequeue();
+                var (current, remaining) = frontier.Dequeue();
 
                 foreach (var neighbor in grid.GetNeighbors(current))
                 {
-                    if (!grid.IsWalkable(neighbor))
-                        continue;
-
-                    int cost = GetTileCost(grid.TryGetNode(neighbor, out var tile) ? tile : null, profile);
-
-                    if (cost < 0 || cost > remainingMove)
-                        continue;
-
-                    if (reachable.Contains(neighbor))
-                        continue;
-
-                    // Check if the unit can enter from current to neighbor
+                    // Entry rules (doors, cliffs, unit blocking, etc.)
                     if (!grid.CanEnter(current, neighbor))
                         continue;
 
-                    reachable.Add(neighbor);
-                    frontier.Enqueue((neighbor, remainingMove - cost));
+                    // Movement type rules (flying, mounted, etc.)
+                    if (!grid.IsWalkable(neighbor, movementProfileData.MoveType))
+                        continue;
+
+                    if (!grid.TryGetNode(neighbor, out var tile))
+                        continue;
+
+                    int cost = GetTileCost(
+                        tile,
+                        movementProfileData.MoveType,
+                        movementProfileData.TerrainInteraction);
+
+                    if (cost < 0 || cost > remaining)
+                        continue;
+
+                    int nextRemaining = remaining - cost;
+
+                    // Only keep the best path to each tile
+                    if (bestRemaining.TryGetValue(neighbor, out int best) &&
+                        best >= nextRemaining)
+                        continue;
+
+                    bestRemaining[neighbor] = nextRemaining;
+                    frontier.Enqueue((neighbor, nextRemaining));
                 }
             }
 
-            return reachable;
+            bestRemaining.TryAdd(start, moveRange);
+
+            return bestRemaining;
         }
 
-        private int GetTileCost(TileInstance tile, MovementProfileData profile)
+        public List<Vector2Int> GetAttackableTiles(Vector2Int origin, int minRange, int maxRange)
         {
-            if (tile == null) return -1;
+            var open = new Queue<Vector2Int>();
+            var visited = new Dictionary<Vector2Int, int>();
+            var inRange = new HashSet<Vector2Int>();
 
-            var costTable = grid.GetMoveCostTable(tile.MapPosition, tile.MapPosition);
-            if (costTable.TryGetCost(profile.MoveType, out var cost))
-                return cost;
-            return -1;
+            open.Enqueue(origin);
+            visited[origin] = 0;
+
+            while (open.Count > 0)
+            {
+                var current = open.Dequeue();
+                int dist = visited[current];
+
+                if (dist >= maxRange)
+                    continue;
+
+                foreach (var neighbor in grid.GetNeighbors(current)) // ✅ FIX
+                {
+                    int nextDist = dist + 1;
+
+                    if (nextDist > maxRange)
+                        continue;
+
+                    if (visited.ContainsKey(neighbor))
+                        continue;
+
+                    visited[neighbor] = nextDist;
+                    open.Enqueue(neighbor);
+
+                    if (nextDist >= minRange)
+                    {
+                        inRange.Add(neighbor);
+                    }
+                }
+            }
+
+            return inRange.ToList();
+        }
+
+
+        public List<Vector2Int> GetAttackableTiles(List<Vector2Int> origins,int minRange, int maxRange)
+        {
+            var open = new Queue<Vector2Int>();
+            var visited = new Dictionary<Vector2Int, int>();
+            var inRange = new HashSet<Vector2Int>();
+
+            // Seed BFS with all origins
+            foreach (var origin in origins)
+            {
+                if (!visited.ContainsKey(origin))
+                {
+                    open.Enqueue(origin);
+                    visited[origin] = 0;
+                }
+            }
+
+            while (open.Count > 0)
+            {
+                var current = open.Dequeue();
+                int dist = visited[current];
+
+                if (dist >= maxRange)
+                    continue;
+
+                foreach (var neighbor in grid.GetNeighbors(current))
+                {
+                    int nextDist = dist + 1;
+
+                    if (nextDist > maxRange)
+                        continue;
+
+                    // Keep shortest distance to each tile
+                    if (visited.TryGetValue(neighbor, out int best) &&
+                        best <= nextDist)
+                        continue;
+
+                    visited[neighbor] = nextDist;
+                    open.Enqueue(neighbor);
+
+                    if (nextDist >= minRange)
+                    {
+                        inRange.Add(neighbor);
+                    }
+                }
+            }
+
+            return inRange.ToList();
+        }
+
+
+
+        private int GetTileCost(TileInstance tile, MoveType moveType, TerrainInteraction terrainInteraction)
+        {
+            if (tile == null)
+                return -1;
+
+            var costTable = grid.GetMoveCostTable(
+                tile.MapPosition,
+                tile.MapPosition);
+
+            // No cost entry = cannot traverse
+            if (!costTable.TryGetCost(moveType, out int baseCost))
+                return -1;
+
+            int movementCost = baseCost;
+
+            switch (terrainInteraction)
+            {
+                case TerrainInteraction.Normal:
+                    // Use base cost
+                    break;
+
+                case TerrainInteraction.ReducedCost:
+                    movementCost = Mathf.Max(1, baseCost / 2);
+                    break;
+
+                case TerrainInteraction.Ignore:
+                    movementCost = 1;
+                    break;
+
+                case TerrainInteraction.Blocked:
+                    return -1;
+            }
+
+            return movementCost;
         }
     }
+
 
     public class CursorController
     {
@@ -195,6 +348,19 @@ namespace Game.Systems.BattleMap
         {
             return tm.TryGetTile(cursor.Position, out tile);
         }
+
+        public bool TryGetHoveredUnit(out int unitId)
+        {
+            unitId = -1;
+            if (!TryGetHoveredTile(out var tile)) return false;
+
+            if (!tile.IsOccupied) return false;
+
+            unitId = (int)tile.UnitOnTile;
+            return true;
+        }
+
+        public Vector2Int GetCursorPostion() => cursor.Position;
     }
 
     public class TileCursor
@@ -214,7 +380,7 @@ namespace Game.Systems.BattleMap
 
     public class TilemapListener : TriggerListener
     {
-        public TilemapListener() 
+        public TilemapListener()
         {
             system = "Tilemap";
             priority = 0;
@@ -224,4 +390,6 @@ namespace Game.Systems.BattleMap
 
         }
     }
+
+
 }

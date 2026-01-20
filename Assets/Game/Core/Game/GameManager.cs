@@ -141,6 +141,11 @@ namespace Game.Core.Game
                 public const int ItemStart = 300;
             }
 
+            public static class Other
+            {
+                public const int NullUnitId = -1;
+            }
+
             public static class Skills
             {
                 public const int MaxSkillEquipped = 5;

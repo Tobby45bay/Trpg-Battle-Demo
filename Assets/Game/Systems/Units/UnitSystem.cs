@@ -9,6 +9,7 @@ using Game.Systems.Tags;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEditor;
 using UnityEngine;
@@ -78,7 +79,8 @@ namespace Game.Systems.Units
                 equippedSkillsId = unitSaveData.OverrideEquippedSkills,
                 knowSkillsID = unitSaveData.OverrideKnowSkills,
                 knowAttacksId = unitSaveData.OverrideAttacks,
-                itemsOwned = unitSaveData.Overrideitems
+                itemsOwned = unitSaveData.Overrideitems,
+                StartingJob = unitSaveData.OverrideJob
             };
  
 
@@ -117,10 +119,44 @@ namespace Game.Systems.Units
         public List<int> equippedSkillsId;
         public List<int> knowAttacksId;
         public List<ItemSave> itemsOwned;
+        public JobSave StartingJob;
         public EffectList effectList;
         public float currentHp;
-        public bool isAlive => currentHp >= 0;
-        public bool hasActed;
+        public bool IsAlive => currentHp >= 0;
+        public bool HasActed;
+        public bool HasMoved;
+    }
+
+    public sealed class UnitRunTime
+    {
+        public int Id { get; }
+        private readonly BattleSystems bs;
+
+        public UnitRunTime(int unitId, BattleSystems battleSystems)
+        {
+            Id = unitId;
+            bs = battleSystems;
+        }
+
+        public string Name => bs.UnitRunTimeManager.GetUnit(Id).unitName;
+
+        //Comabat
+        public void TakeDamage(float amount) => bs.UnitRunTimeManager.TakeDamage(Id, false, amount);
+        public void Heal(float amount) => bs.UnitRunTimeManager.TakeDamage(Id, false, amount);
+        public float GetDamage(DamageType type) => bs.UnitRunTimeManager.GetUnitDamage(Id, type);
+        public float GetDefence(DamageType damageType) => bs.UnitRunTimeManager.GetUnitDefence(Id, damageType);
+        public AttackData GetSelectedAttack() => bs.UnitRunTimeManager.GetSelectedAttack(Id);
+
+        public AttackData GetDefaultAttack()=> bs.UnitRunTimeManager.GetDefaultAttack(Id);
+        public bool TryGetEquippedWeapon(out ItemInstance weapon)=> bs.UnitRunTimeManager.TryGetEquippedWeapon(Id, out weapon);
+
+
+        //Movment
+        public bool TryGetMapPosition(out Vector2Int pos) => bs.TilemapManager.TryGetUnitPos(Id, out pos);
+        public MovementProfileData GetCurrentMove() => bs.UnitRunTimeManager.GetUnitCurrentMoveProfile(Id);
+        public void MoveTo(Vector2Int pos) => bs.TilemapManager.TryMoveUnit(Id, pos);
+
+        //stats
     }
 
     public class UnitRunTimeManager
@@ -140,6 +176,7 @@ namespace Game.Systems.Units
             battleSystems.SkillManager.RegisterUnit(unitId, unitInstance.equippedSkillsId, unitInstance.knowSkillsID);
             battleSystems.AttackLoadOutManager.RegisterUnit(unitId, unitInstance.knowAttacksId);
             battleSystems.InventoryManager.RegisterUnit(unitId, unitInstance.itemsOwned);
+            battleSystems.JobManager.RegisterUnit(unitId, unitInstance.StartingJob.JobID);
 
         }
 
@@ -205,15 +242,22 @@ namespace Game.Systems.Units
             return defualtAttack;
         }
 
-        public MoveType GetUnitCurrentMoveType(int unitId)
+        public bool TryGetEquippedWeapon(in int unitId, out ItemInstance weapon)
         {
-            if (!unitRegistry.ContainsKey(unitId)) return MoveType.None;
+            weapon = null;
+            if (!unitRegistry.ContainsKey(unitId)) return false;
+
+            weapon = battleSystems.InventoryManager.GetEquippedWeapon(unitId);
+            return true;
+        }
+
+        public MovementProfileData GetUnitCurrentMoveProfile(int unitId)
+        {
+            if (!unitRegistry.ContainsKey(unitId)) return null;
 
             var moveProfile = battleSystems.JobManager.GetUnitCurrentMoveProfile(unitId);
 
-            if(moveProfile == null) return MoveType.None;
-
-            return moveProfile.MoveType;
+            return moveProfile;
         }
 
         public void TickUnit(int unitId)
@@ -226,14 +270,21 @@ namespace Game.Systems.Units
         public void SetHasActed(int unitId,bool hasActed)
         {
             if (unitRegistry.TryGetValue(unitId,out var unitInstance)) return;
-            unitInstance.hasActed = hasActed;
+            unitInstance.HasActed = hasActed;
         }
 
         public bool CanAct(int unitId)
         {
             if (unitRegistry.TryGetValue(unitId, out var unitInstance)) return false;
-            return unitInstance.hasActed;
+            return unitInstance.HasActed;
         }
+
+        public bool HasMoved(int unitId)
+        {
+            if (unitRegistry.TryGetValue(unitId, out var unitInstance)) return false;
+            return unitInstance.HasMoved;
+        }
+
 
         public UnitInstance GetUnit(int unitId)
         {

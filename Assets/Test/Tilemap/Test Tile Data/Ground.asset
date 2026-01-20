@@ -17,10 +17,24 @@ MonoBehaviour:
   costTable:
     costs:
     - moveType: 0
-      cost: 2
+      TerrainInteraction: 0
+      cost: 1
+    - moveType: 0
+      TerrainInteraction: 0
+      cost: 1
     - moveType: 1
-      cost: 2
+      TerrainInteraction: 0
+      cost: 1
+    - moveType: 2
+      TerrainInteraction: 0
+      cost: 1
+    - moveType: 4
+      TerrainInteraction: 0
+      cost: 1
   isPassable: 1
+  BlockFlying: 0
+  BlockMounted: 0
+  BlockArmored: 0
   onUnitEnter:
     TriggerCall:
       useCustom: 0

@@ -16,24 +16,16 @@ MonoBehaviour:
   height: 10
   sprites:
   - {fileID: 38874541, guid: ca2e0b63c399a344583834ed6a07f18d, type: 3}
-  - {fileID: -526341225, guid: ca2e0b63c399a344583834ed6a07f18d, type: 3}
   - {fileID: 706723240, guid: ca2e0b63c399a344583834ed6a07f18d, type: 3}
   - {fileID: -1658192164, guid: ca2e0b63c399a344583834ed6a07f18d, type: 3}
+  - {fileID: -526341225, guid: ca2e0b63c399a344583834ed6a07f18d, type: 3}
   cells:
   - tileId: 0
     spriteId: 0
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 1
-  - tileId: 1
-    spriteId: 1
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
   - tileId: 0
@@ -44,16 +36,8 @@ MonoBehaviour:
     spriteId: 0
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 1
-  - tileId: 1
-    spriteId: 1
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
   - tileId: 0
@@ -64,16 +48,12 @@ MonoBehaviour:
     spriteId: 0
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
   - tileId: 0
     spriteId: 0
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
   - tileId: 0
@@ -92,8 +72,6 @@ MonoBehaviour:
     spriteId: 0
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
   - tileId: 0
@@ -152,8 +130,6 @@ MonoBehaviour:
     spriteId: 0
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
   - tileId: 0
@@ -164,16 +140,12 @@ MonoBehaviour:
     spriteId: 0
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
   - tileId: 0
     spriteId: 0
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
   - tileId: 0
@@ -184,16 +156,8 @@ MonoBehaviour:
     spriteId: 0
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 1
-  - tileId: 1
-    spriteId: 1
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
   - tileId: 0
@@ -204,16 +168,52 @@ MonoBehaviour:
     spriteId: 0
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 2
   - tileId: 0
     spriteId: 0
-  - tileId: 1
-    spriteId: 1
-  - tileId: 1
-    spriteId: 1
-  - tileId: 1
-    spriteId: 2
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
+  - tileId: 0
+    spriteId: 0
   - tileId: 0
     spriteId: 0
   - tileId: 0

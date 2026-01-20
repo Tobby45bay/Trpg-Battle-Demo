@@ -15,14 +15,38 @@ MonoBehaviour:
   tileId: 1
   tileName: 
   costTable:
-    costs: []
-  isPassable: 1
+    costs:
+    - moveType: 0
+      TerrainInteraction: 0
+      cost: -1
+    - moveType: 0
+      TerrainInteraction: 0
+      cost: -1
+    - moveType: 1
+      TerrainInteraction: 0
+      cost: 1
+    - moveType: 2
+      TerrainInteraction: 0
+      cost: -1
+    - moveType: 3
+      TerrainInteraction: 0
+      cost: -1
+  isPassable: 0
+  BlockFlying: 0
+  BlockMounted: 1
+  BlockArmored: 1
   onUnitEnter:
-    triggerCall: 
-    actions: []
+    TriggerCall:
+      useCustom: 0
+      core: 0
+      custom: 
+    Actions: []
   onUnitExit:
-    triggerCall: 
-    actions: []
+    TriggerCall:
+      useCustom: 0
+      core: 0
+      custom: 
+    Actions: []
   references:
     version: 2
     RefIds: []

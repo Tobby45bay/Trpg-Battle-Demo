@@ -12,6 +12,9 @@ namespace Game.Systems.BattleMap
         public string tileName;
         public CostTable costTable;
         public bool isPassable = true;
+        public bool BlockFlying;
+        public bool BlockMounted;
+        public bool BlockArmored;
 
         public TriggerGroup onUnitEnter;
         public TriggerGroup onUnitExit;

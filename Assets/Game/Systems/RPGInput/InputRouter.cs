@@ -9,18 +9,17 @@ namespace Game.Systems.RPGInput
 
         void Update()
         {
-            // Human input
             if (Input.GetKeyDown(KeyCode.W))
                 Emit(InputIntent.NavigateUp);
-            if (Input.GetKeyDown(KeyCode.S))
+            else if (Input.GetKeyDown(KeyCode.S))
                 Emit(InputIntent.NavigateDown);
-            if (Input.GetKeyDown(KeyCode.A))
+            else if (Input.GetKeyDown(KeyCode.A))
                 Emit(InputIntent.NavigateLeft);
-            if (Input.GetKeyDown(KeyCode.D))
+            else if (Input.GetKeyDown(KeyCode.D))
                 Emit(InputIntent.NavigateRight);
-            if (Input.GetKeyDown(KeyCode.Space))
+            else if (Input.GetKeyDown(KeyCode.Space))
                 Emit(InputIntent.Confirm);
-            if (Input.GetKeyDown(KeyCode.Escape))
+            else if (Input.GetKeyDown(KeyCode.Escape))
                 Emit(InputIntent.Cancel);
         }
 

@@ -17,9 +17,9 @@ MonoBehaviour:
   StatingTiles: []
   UnitsOnMap:
   - OverrideName: 
-    templateId: 0
+    templateId: 2
     hasFactionOverride: 1
-    OverrideFactionId: 1
+    OverrideFactionId: 3
     OverrideCurrentLevel: 0
     OverrideCurrentExp: 0
     hasStatOverride: 0
@@ -31,15 +31,15 @@ MonoBehaviour:
     OverrideJobs: []
     Overrideitems:
     - ItemID: 100
-      Name: 
+      Name: Bow
       uses: 5
       isEquipped: 1
     OverrideAttacks: 
     OverrideEquippedSkills: c9000000
     OverrideKnowSkills: c9000000
-    OverrideTilePostion: {x: 1, y: 1}
+    OverrideTilePostion: {x: 0, y: 0}
   - OverrideName: 
-    templateId: 2
+    templateId: 0
     hasFactionOverride: 0
     OverrideFactionId: 0
     OverrideCurrentLevel: 0
@@ -59,4 +59,4 @@ MonoBehaviour:
     OverrideAttacks: 
     OverrideEquippedSkills: ca000000
     OverrideKnowSkills: ca000000
-    OverrideTilePostion: {x: 0, y: 0}
+    OverrideTilePostion: {x: 5, y: 4}
