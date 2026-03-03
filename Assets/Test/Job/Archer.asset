@@ -18,5 +18,13 @@ MonoBehaviour:
     DefaultMovementId: 0
     SecondaryMovementId: -1
     JobPassiveEffects: 
-    JobRewards: []
+    JobRewardsPool:
+    - RequiredLevel: 1
+      Source: 3
+      SourceId: 300
+      CanTransfer: 0
+    - RequiredLevel: 3
+      Source: 3
+      SourceId: 301
+      CanTransfer: 0
     JobPromotions: []

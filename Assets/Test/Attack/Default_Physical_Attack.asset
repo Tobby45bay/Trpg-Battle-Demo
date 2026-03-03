@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: Default_Physical_Attack
   m_EditorClassIdentifier: 
   AttackId: 0
+  AttackName: Default Attack
   RequiredWeapon: 5
   tags: []
   TargetData:
-    shape: 0
-    ShapeX: 0
-    ShapeY: 0
+    ShapeX: 1
+    ShapeY: 1
     UseRangeOverride: 0
     MinRangeOverride: 0
     MaxRangeOverride: 0
   PrimaryDamage:
     damageType: 1
     BaseDamage: 0
-    DamageModifier: 1
+    DamageModifier: 20
     UseOverrideStat: 0
     OverrideStat: 0
   SecondaryEffects:

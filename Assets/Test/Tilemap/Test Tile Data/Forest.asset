@@ -12,36 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59acd852986c9104da87bc9fa1c62ea8, type: 3}
   m_Name: Forest
   m_EditorClassIdentifier: 
-  tileId: 2
-  tileName: Forset
-  costTable:
-    costs:
-    - moveType: 0
-      TerrainInteraction: 0
-      cost: 2
-    - moveType: 1
-      TerrainInteraction: 0
-      cost: 3
-    - moveType: 2
-      TerrainInteraction: 0
-      cost: 1
-    - moveType: 3
-      TerrainInteraction: 0
-      cost: 2
-    - moveType: 4
-      TerrainInteraction: 1
-      cost: 2
-  isPassable: 1
-  BlockFlying: 0
-  BlockMounted: 0
-  BlockArmored: 0
-  onUnitEnter:
+  Id: 2
+  Name: 
+  TerrainData:
+    costTable:
+      costs:
+      - moveType: 0
+        baseCost: 2
+        interaction: 0
+      - moveType: 1
+        baseCost: 3
+        interaction: 2
+      - moveType: 2
+        baseCost: 2
+        interaction: 0
+      - moveType: 3
+        baseCost: 1
+        interaction: 2
+    blockFlying: 0
+    blockMounted: 0
+    blockArmored: 0
+  OnUnitEnter:
     TriggerCall:
       useCustom: 0
       core: 0
       custom: 
     Actions: []
-  onUnitExit:
+  OnUnitExit:
     TriggerCall:
       useCustom: 0
       core: 0

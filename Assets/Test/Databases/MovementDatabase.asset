@@ -16,25 +16,30 @@ MonoBehaviour:
   - Id: 0
     Name: Infantry
     MoveType: 0
-    TerrainInteraction: 0
-    BaseRange: 4
+    BaseRange: 6
+    CanMoveThroughUnits: 0
+    CanRescueUnits: 0
   - Id: 1
     Name: Calvary
     MoveType: 1
-    TerrainInteraction: 0
-    BaseRange: 5
+    BaseRange: 8
+    CanMoveThroughUnits: 0
+    CanRescueUnits: 0
   - Id: 2
     Name: Flying
     MoveType: 2
-    TerrainInteraction: 0
-    BaseRange: 6
+    BaseRange: 8
+    CanMoveThroughUnits: 0
+    CanRescueUnits: 0
   - Id: 3
     Name: Armored
     MoveType: 3
-    TerrainInteraction: 0
-    BaseRange: 4
+    BaseRange: 5
+    CanMoveThroughUnits: 0
+    CanRescueUnits: 0
   - Id: 4
     Name: Light Armored
     MoveType: 3
-    TerrainInteraction: 1
-    BaseRange: 4
+    BaseRange: 6
+    CanMoveThroughUnits: 0
+    CanRescueUnits: 0
