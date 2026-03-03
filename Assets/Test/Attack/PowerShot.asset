@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9339e08b9892cc8449571a4e4a2ebcdf, type: 3}
+  m_Name: PowerShot
+  m_EditorClassIdentifier: 
+  AttackId: 300
+  AttackName: Power Shot
+  RequiredWeapon: 4
+  tags: []
+  TargetData:
+    ShapeX: 1
+    ShapeY: 1
+    UseRangeOverride: 0
+    MinRangeOverride: 0
+    MaxRangeOverride: 0
+  PrimaryDamage:
+    damageType: 1
+    BaseDamage: 0
+    DamageModifier: 40
+    UseOverrideStat: 0
+    OverrideStat: 0
+  SecondaryEffects:
+    BaseChance: 0
+  UseCost: 0
