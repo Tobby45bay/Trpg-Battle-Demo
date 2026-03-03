@@ -27,12 +27,12 @@ MonoBehaviour:
       coreStats: []
     OverrideJob:
       JobID: 0
-      jobLevel: 0
+      jobLevel: 5
     OverrideJobs: []
     Overrideitems:
     - ItemID: 100
       Name: Bow
-      uses: 5
+      uses: 0
       isEquipped: 1
     OverrideAttacks: 
     OverrideEquippedSkills: c9000000
@@ -40,8 +40,8 @@ MonoBehaviour:
     OverrideTilePostion: {x: 0, y: 0}
   - OverrideName: 
     templateId: 0
-    hasFactionOverride: 0
-    OverrideFactionId: 0
+    hasFactionOverride: 1
+    OverrideFactionId: 4
     OverrideCurrentLevel: 0
     OverrideCurrentExp: 0
     hasStatOverride: 0
@@ -50,7 +50,9 @@ MonoBehaviour:
     OverrideJob:
       JobID: 0
       jobLevel: 0
-    OverrideJobs: []
+    OverrideJobs:
+    - JobID: 0
+      jobLevel: 0
     Overrideitems:
     - ItemID: 100
       Name: 
@@ -59,4 +61,28 @@ MonoBehaviour:
     OverrideAttacks: 
     OverrideEquippedSkills: ca000000
     OverrideKnowSkills: ca000000
-    OverrideTilePostion: {x: 5, y: 4}
+    OverrideTilePostion: {x: 0, y: 4}
+  - OverrideName: 
+    templateId: 0
+    hasFactionOverride: 1
+    OverrideFactionId: 4
+    OverrideCurrentLevel: 0
+    OverrideCurrentExp: 0
+    hasStatOverride: 0
+    OverrideUnitStatData:
+      coreStats: []
+    OverrideJob:
+      JobID: 0
+      jobLevel: 0
+    OverrideJobs:
+    - JobID: 0
+      jobLevel: 0
+    Overrideitems:
+    - ItemID: 100
+      Name: 
+      uses: 5
+      isEquipped: 1
+    OverrideAttacks: 
+    OverrideEquippedSkills: ca000000
+    OverrideKnowSkills: ca000000
+    OverrideTilePostion: {x: 5, y: 0}
